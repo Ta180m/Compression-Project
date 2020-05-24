@@ -8,7 +8,7 @@ int getweight(string s)
 {
   if(s[0]=='$')
     return 1000;
-  else if(s=="Farmer"||s=="a"||s=="example")return 1;
+  else if(s=="farmer"||s.length()==1||s=="example")return 1;
   else return 10;
 }
 struct clause
@@ -24,7 +24,8 @@ struct clause
     for(int j=0;j<s.length();j++)
     {
       if(s.at(j)=='$') iseq=!iseq;
-      if(('a'<=s.at(j)&&s.at(j)<='z')||('A'<=s.at(j)&&s.at(j)<='Z')||('0'<=s.at(j)&&s.at(j)<='9')||(iseq&&s.at(j)=='$')))word+=s.at(j);
+      if(('a'<=s.at(j)&&s.at(j)<='z')||('A'<=s.at(j)&&s.at(j)<='Z')||('0'<=s.at(j)&&s.at(j)<='9')||(iseq&&s.at(j)!=' '))
+        word+=('A'<=s.at(j)&&s.at(j)<='Z')?(s.at(j)-'A'+'a'):(s.at(j));
       else
       {
         if(!iseq)

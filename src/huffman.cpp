@@ -29,17 +29,19 @@ namespace huffman {
       v.push_back(1);
       for (int i = 0; i < 8; ++i) v.push_back(1 & (n->c >> i));
     }
-    else v.push_back(0);
-    if (n->l) {
-      v.push_back(1);
-      encode_tree(n->l, v);
+    else {
+      v.push_back(0);
+      if (n->l) {
+        v.push_back(1);
+        encode_tree(n->l, v);
+      }
+      else v.push_back(0);
+      if (n->r) {
+        v.push_back(1);
+        encode_tree(n->r, v);
+      }
+      else v.push_back(0);
     }
-    else v.push_back(0);
-    if (n->r) {
-      v.push_back(1);
-      encode_tree(n->r, v);
-    }
-    else v.push_back(0);
   }
 
   int idx = 0;
@@ -47,14 +49,16 @@ namespace huffman {
     if (v[idx++] == 1) {
       for (int i = 0; i < 8; ++i) n->c |= (1 << v[idx++]);
     }
-    if (v[idx++] == 1) {
-      n->l = new node(0, 0);
-      decode_tree(n->l, v);
-    }
-    if (v[idx++] == 1) {
-      n->r = new node(0, 0);
-      decode_tree(n->r, v);
-    }
+    else {
+      if (v[idx++] == 1) {
+        n->l = new node(0, 0);
+        decode_tree(n->l, v);
+      }
+      if (v[idx++] == 1) {
+        n->r = new node(0, 0);
+        decode_tree(n->r, v);
+      }
+    }    
   }
 
   void generate(vector<int> f) {
@@ -76,7 +80,7 @@ namespace huffman {
   void solve(node * n, vector<bool> & v, string & s) {
     if (n->c) {
       s += n->c;
-      cout << (int)n->c << '\n';
+      //cout << (int)n->c << '\n';
       if (idx > v.size()) return;
       solve(root, v, s);
     }

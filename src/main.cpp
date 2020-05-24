@@ -2,9 +2,14 @@
 #include "huffman.h"
 #define pb push_back
 
+
+
 int getweight(string s)
 {
-  return 0;
+  if(s[0]=='$')
+    return 1000;
+  else if(s=="Farmer"||s=="a"||s=="example")return 1;
+  else return 10;
 }
 struct clause
 {
@@ -15,13 +20,18 @@ struct clause
   void parse()
   {
     string word="";
+    bool iseq=false;
     for(int j=0;j<s.length();j++)
     {
-      if(s.at(j)!=' ')word+=s.at(j);
+      if(s.at(j)=='$') iseq=!iseq;
+      if(('a'<=s.at(j)&&s.at(j)<='z')||('A'<=s.at(j)&&s.at(j)<='Z')||('0'<=s.at(j)&&s.at(j)<='9')||(iseq&&s.at(j)=='$')))word+=s.at(j);
       else
       {
-        if(word!="")words.pb(word);
-        word="";
+        if(!iseq)
+        {
+          if(word!="")words.pb(word);
+          word="";
+        }
       }
     }
     if(word!="") words.pb(word);
@@ -41,11 +51,11 @@ struct sentence
   void parse()
   {
     string cl="";
-    //bool iseq=false;
+    bool iseq=false;
     for(int j=0;j<s.length();j++)
     {
-      //if(s.at(j)=='$') iseq=!iseq;
-      if(s.at(j)!=',') cl+=s.at(j);
+      if(s.at(j)=='$') iseq=!iseq;
+      if(s.at(j)!=','|| iseq) cl+=s.at(j);
       else
       {
         clause tmp;
@@ -68,7 +78,11 @@ struct sentence
   void calcweight()
   {
     weight=-100000;
-    for(auto& c : clauses)if(c.weight>weight)weight=c.weight;
+    for(auto& c : clauses)
+    {
+      c.calcweight();
+      if(c.weight>weight)weight=c.weight;
+    }
   }
 };
 vector<sentence> text;
@@ -80,12 +94,14 @@ void init()
   cin>>c;
   ifstream stin("soc1.txt");
   string sentencefile="";
+  bool iseq=false;
   while(getline(stin,line))
   {
     for(int i=0;i<line.length();i++)
     {
       b++;
-      if(line.at(i)!='.')sentencefile+=line.at(i);
+      if(line.at(i)=='$') iseq=!iseq;
+      if((line.at(i)!='.'&&line.at(i)!='?'&&line.at(i)!='!')|| iseq)sentencefile+=line.at(i);
       else
       {
         sentence tmp;tmp.s=sentencefile;text.pb(tmp);
@@ -95,16 +111,23 @@ void init()
     b++;
     sentencefile+=' ';
   }
-}
-void clsep()
-{
   for(auto& i:text)i.parse();
 }
 int main() {
   init();
-  clsep();
-  /*vector<bool> test = huffman::encode("test");
+  for(sentence& i:text)
+  {
+    for(clause& j:i.clauses)
+    {
+      for(auto k:j.words)
+      {
+        cout<<k<<endl;
+      }
+    }
+  }
+
+  vector<bool> test = huffman::encode("test");
   for (auto b : test) cout << b;
   string s = huffman::decode(test);
-  cout << s << '\n';*/
+  cout << s << '\n';
 }

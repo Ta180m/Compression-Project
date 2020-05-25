@@ -1,2 +1,2 @@
 language = "cpp"
-run = "make; ./compress; rm compress"
+run = "g++ src/*.cpp -o out -std=c++11; ./out; rm out"

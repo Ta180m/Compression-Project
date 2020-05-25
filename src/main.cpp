@@ -115,7 +115,7 @@ void init()
   for(auto& i:text)i.parse();
 }
 int main() {
-  init();
+  /*init();
   for(sentence& i:text)
   {
     for(clause& j:i.clauses)
@@ -125,10 +125,11 @@ int main() {
         cout<<k<<endl;
       }
     }
-  }
+  }*/
 
-  vector<bool> test = huffman::encode("test");
+  vector<bool> test = huffman::encode("asdfjkl;1234");
   for (auto b : test) cout << b;
+  cout << '\n';
   string s = huffman::decode(test);
   cout << s << '\n';
 }

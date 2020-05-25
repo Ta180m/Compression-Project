@@ -8,19 +8,10 @@ namespace huffman {
   };
   struct comp { bool operator()(node * a, node * b) { return a->f > b->f; } };
   node * root;
-  vector<bool> path;
-  vector<vector<bool>> code(128);
+  vector<bool> path, code[128];
   void traverse(node * n) {
-    if (n->l) {
-      path.push_back(0);
-      traverse(n->l);
-      path.pop_back();
-    }
-    if (n->r) {
-      path.push_back(1);
-      traverse(n->r);
-      path.pop_back();
-    }
+    if (n->l) path.push_back(0), traverse(n->l), path.pop_back();
+    if (n->r) path.push_back(1), traverse(n->r), path.pop_back();
     if (n->c) code[n->c] = path;
   }
 
@@ -31,15 +22,9 @@ namespace huffman {
     }
     else {
       v.push_back(0);
-      if (n->l) {
-        v.push_back(1);
-        encode_tree(n->l, v);
-      }
+      if (n->l) v.push_back(1), encode_tree(n->l, v);
       else v.push_back(0);
-      if (n->r) {
-        v.push_back(1);
-        encode_tree(n->r, v);
-      }
+      if (n->r) v.push_back(1), encode_tree(n->r, v);
       else v.push_back(0);
     }
   }
@@ -47,29 +32,22 @@ namespace huffman {
   int idx = 0;
   void decode_tree(node * n, vector<bool> & v) {
     if (v[idx++] == 1) {
-      for (int i = 0; i < 8; ++i) n->c |= (1 << v[idx++]);
+      for (int i = 0; i < 8; ++i) if (v[idx++]) n->c |= (1 << i);
     }
     else {
-      if (v[idx++] == 1) {
-        n->l = new node(0, 0);
-        decode_tree(n->l, v);
-      }
-      if (v[idx++] == 1) {
-        n->r = new node(0, 0);
-        decode_tree(n->r, v);
-      }
+      if (v[idx++] == 1) n->l = new node(0, 0), decode_tree(n->l, v);
+      if (v[idx++] == 1) n->r = new node(0, 0), decode_tree(n->r, v);
     }    
   }
 
   void generate(vector<int> f) {
     priority_queue<node *, vector<node *>, comp> pq;
-    for (int c = 0; c < 128; ++c) {
+    for (int c = 1; c < 128; ++c) {
       node * n = new node(c, f[c]);
       pq.push(n);
     }
     while (pq.size() > 1) {
-      node * l = pq.top(); pq.pop();
-      node * r = pq.top(); pq.pop();
+      node * l = pq.top(); pq.pop(); node * r = pq.top(); pq.pop();
       node * n = new node(0, l->f + r->f);
       n->l = l, n->r = r;
       pq.push(n);
@@ -78,16 +56,9 @@ namespace huffman {
   }
 
   void solve(node * n, vector<bool> & v, string & s) {
-    if (n->c) {
-      s += n->c;
-      //cout << (int)n->c << '\n';
-      if (idx > v.size()) return;
-      solve(root, v, s);
-    }
-    else {
-      if (v[idx++] == 0) solve(n->l, v, s);
-      else solve(n->r, v, s);
-    }    
+	if (idx > v.size()) return;
+    if (n->c) s += n->c, solve(root, v, s);
+    else v[idx++] == 0 ? solve(n->l, v, s) : solve(n->r, v, s);
   }
 
   vector<bool> encode(string s) {

@@ -8,7 +8,8 @@ int getweight(string s)
 {
   if(s[0]=='$')
     return 1000;
-  else if(s=="farmer"||s.length()==1||s=="example")return 1;
+  else if(s=="farmer"||s.length()==1||s=="example"||s=="is"||s=="are")return 1;
+  else if(s=="one"||s=="two"||s=="three"||s=="four"||s=="five"||s=="six"||s=="seven"||s=="eight"||s=="nine")return 100;
   else return 10;
 }
 struct clause
@@ -115,7 +116,7 @@ void init()
   for(auto& i:text)i.parse();
 }
 int main() {
-  /*init();
+  init();
   for(sentence& i:text)
   {
     for(clause& j:i.clauses)
@@ -125,9 +126,9 @@ int main() {
         cout<<k<<endl;
       }
     }
-  }*/
+  }
 
-  vector<bool> test = huffman::encode("asdfjkl;1234");
+  vector<bool> test = huffman::encode("A terrible new disease, COWVID-19, has begun to spread among cows worldwide. Farmer John is trying to take as many precautions as possible to protect his herd from infection.");
   for (auto b : test) cout << b;
   cout << '\n';
   string s = huffman::decode(test);

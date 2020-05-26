@@ -116,7 +116,7 @@ void init()
   for(auto& i:text)i.parse();
 }
 int main() {
-  init();
+  /*init();
   for(sentence& i:text)
   {
     for(clause& j:i.clauses)
@@ -126,11 +126,20 @@ int main() {
         cout<<k<<endl;
       }
     }
+  }*/
+  
+  string orig = "Snow has arrived on the farm, and as she does at the beginning of every winter, Bessie is building a snow-cow! Most of the time, Bessie strives to make her sculpture look as much like a real cow as possible. However, feeling artistically inspired, this year she decides to pursue a more abstract route and build a sculpture in the shape of a tree, consisting of N snowballs (1<=N<=105) connected by N-1 branches, each connecting a pair of snowballs such that there is a unique path between every pair of snowballs. Bessie has added a nose to one of the snowballs, so it represents the head of the abstract snow cow. She designates it as snowball number 1. To add more visual interest, she plans to dye some of the snowballs different colors in an artistic fashion by filling old milk pails with colored dye and splashing them onto the sculpture. Colors are identified by integers in the range 1...105, and Bessie has an unlimited supply of buckets filled with dyes of every possible color. When Bessie splashes a snowball with a bucket of dye, all the snowballs in its subtree are also splashed with the same dye (snowball y is in the subtree of snowball x if x lies on the path from y to the head snowball). By splashing each color with great care, Bessie makes sure that all colors a snowball has been splashed with will remain visible. For example, if a snowball had colors [1,2,3] and Bessie splashes it with color 4, the snowball will then have colors [1,2,3,4]. After splashing the snowballs some number of times, Bessie may also want to know how colorful a part of her snow-cow is. The \"colorfulness\" of a snowball x is equal to the number of distinct colors c such that snowball x is colored c. If Bessie asks you about snowball x, you should reply with the sum of the colorfulness values of all snowballs in the subtree of x. Please help Bessie find the colorfulness of her snow-cow at certain points in time.";
+  vector<bool> enc = huffman::encode(orig);
+  string dec = huffman::decode(enc);
+  if (orig != dec) {
+	  cout << "Not a match!\n";
   }
-
-  vector<bool> test = huffman::encode("A terrible new disease, COWVID-19, has begun to spread among cows worldwide. Farmer John is trying to take as many precautions as possible to protect his herd from infection.");
-  for (auto b : test) cout << b;
-  cout << '\n';
-  string s = huffman::decode(test);
-  cout << s << '\n';
+  else {
+    cout << dec << '\n';
+    for (auto b : enc) cout << b;
+    cout << '\n';
+	cout << "Original length: " << orig.size() << '\n';
+    cout << "Compressed length: " << (enc.size() + 7) / 8 << '\n';
+	cout << "Percent compression: " << 1.0 - (double)(enc.size() + 7) / 8 / orig.size() << '\n';
+  }
 }

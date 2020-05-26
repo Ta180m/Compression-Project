@@ -18,7 +18,7 @@ namespace huffman {
   void encode_tree(node * n, vector<bool> & v) {
     if (n->c) {
       v.push_back(1);
-      for (int i = 0; i < 8; ++i) v.push_back(1 & (n->c >> i));
+      for (int i = 0; i < 7; ++i) v.push_back(1 & (n->c >> i));
     }
     else {
       v.push_back(0);
@@ -32,7 +32,7 @@ namespace huffman {
   int idx = 0;
   void decode_tree(node * n, vector<bool> & v) {
     if (v[idx++] == 1) {
-      for (int i = 0; i < 8; ++i) if (v[idx++]) n->c |= (1 << i);
+      for (int i = 0; i < 7; ++i) if (v[idx++]) n->c |= (1 << i);
     }
     else {
       if (v[idx++] == 1) n->l = new node(0, 0), decode_tree(n->l, v);
@@ -42,7 +42,7 @@ namespace huffman {
 
   void generate(vector<int> f) {
     priority_queue<node *, vector<node *>, comp> pq;
-    for (int c = 1; c < 128; ++c) {
+    for (int c = 1; c < 128; ++c) if (f[c]) {
       node * n = new node(c, f[c]);
       pq.push(n);
     }

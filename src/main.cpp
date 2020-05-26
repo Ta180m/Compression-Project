@@ -73,7 +73,7 @@ struct sentence
 {
   vector<clause> clauses;
   string s;
-  int weight;
+  weightstruct weight;
   void parse()
   {
     string cl="";

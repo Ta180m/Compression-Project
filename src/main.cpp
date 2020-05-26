@@ -7,7 +7,7 @@ struct weightstruct
   int word;
   int clause;
   int sentence;
-  weightstruct(int a=100,int b=0,int c=0):word(a),clause(b),sentence(c){}
+  weightstruct(int a=0,int b=0,int c=0):word(a),clause(b),sentence(c){}
   weightstruct operator + (const weightstruct& w) const
   {
     return weightstruct(word+w.word,clause+w.clause,sentence+w.sentence);
@@ -187,7 +187,7 @@ string gettextstring(int minw)
 
 int main() {
   init();
-  for(auto x:text)
+  for(auto& x:text)
     x.calcweight();
   cout<<gettextstring(-10000);
   

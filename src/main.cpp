@@ -2,199 +2,352 @@
 #include "huffman.h"
 #define pb push_back
 
+
 struct weightstruct
 {
-  int word;
-  int clause;
-  int sentence;
-  weightstruct(int a=0,int b=0,int c=0):word(a),clause(b),sentence(c){}
-  weightstruct operator + (const weightstruct& w) const
-  {
-    return weightstruct(word+w.word,clause+w.clause,sentence+w.sentence);
-  }
+	int word;
+	int clause;
+	int sentence;
+	weightstruct(int a=0,int b=0,int c=0):word(a),clause(b),sentence(c){}
+	weightstruct operator + (const weightstruct& w) const
+	{
+		return weightstruct(word+w.word,clause+w.clause,sentence+w.sentence);
+	}
 };
 
 weightstruct getweight(string s)
 {
-  if(s[0]=='$')
-    return weightstruct(1000,0,0);
-  else if(s=="farmer"||s.length()==1||s=="example"||s=="is"||s=="are")return weightstruct(-100,0,0);
-  else if(s=="one"||s=="two"||s=="three"||s=="four"||s=="five"||s=="six"||s=="seven"||s=="eight"||s=="nine")return weightstruct(-100,0,0);
-  else return weightstruct(0,0,0);
+	if(s[0]=='$')
+		return weightstruct(1000,0,0);
+	else if(s=="farmer"||s.length()==1||s=="example"||s=="is"||s=="are")return weightstruct(-100,0,0);
+	else if(s=="one"||s=="two"||s=="three"||s=="four"||s=="five"||s=="six"||s=="seven"||s=="eight"||s=="nine")return weightstruct(100,0,0);
+	else return weightstruct(-10,0,0);
 }
+void preprocessword(int stage,string& s,string& next,int pos)
+{
+	if(stage==-1)//after deleting low weights
+	{
+		if(s[0]=='$')
+			s=s.substr(1,s.length()-2);
+	}
+	if(stage==0)
+	{
+		string tmp;
+		for(char c:s)
+			tmp+=('A'<=c&&c<='Z')?(c-'A'+'a'):(c);
+		s=tmp;
+	}
+	if(stage==1)
+	{
+		if(s=="and")
+			s=",";
+		if(s.size()>=2)
+			if(s.substr(s.size()-2)=="'s")
+				s=s.substr(0,s.size()-2);
+	}
+	if(stage==2)
+	{
+		if(s=="farmer"&&next=="john")
+		{
+			s="fj";
+			next="";
+		}
+	}
+}
+
 struct clause
 {
-  vector<string> words;
-  vector<weightstruct> weights;
-  string s;
-  weightstruct weight;
-  void parse()
-  {
-    string word="";
-    bool iseq=false;
-    for(int j=0;j<s.length();j++)
-    {
-      if(s.at(j)=='$') iseq=!iseq;
-      if(('a'<=s.at(j)&&s.at(j)<='z')||('A'<=s.at(j)&&s.at(j)<='Z')||('0'<=s.at(j)&&s.at(j)<='9')||(iseq&&s.at(j)!=' '))
-        word+=('A'<=s.at(j)&&s.at(j)<='Z')?(s.at(j)-'A'+'a'):(s.at(j));
-      else
-      {
-        if(!iseq)
-        {
-          if(word!="")words.pb(word);
-          word="";
-        }
-      }
-    }
-    if(word!="") words.pb(word);
-  }
-  void calcweight()
-  {
-    weights.clear();
-    for(auto& w: words)weights.pb(getweight(w));
-    for(auto& w: weights) weight=weight+w;
-  }
-  string gettext(int minw)
-  {
-    bool iss=true;
-    string ans="";
-    for(int i=0;i<words.size();i++)
-      if(weights[i].word>=minw)
-      {
-        if(iss)
-        {
-          iss=false;
-          ans+=words[i];
-        }
-        else ans+=" "+words[i];
-    }
-    return ans;
-  }
+	vector<string> words;
+	vector<weightstruct> weights;
+	string s;
+	weightstruct weight;
+	void parse()
+	{
+		string word="";
+		bool iseq=false;
+		for(int j=0;j<s.length();j++)
+		{
+			if(s.at(j)=='$')
+			{
+				if(iseq)
+				{
+					word+="$";
+					words.pb(word);
+					word="";
+					iseq=false;
+				}
+				else
+				{
+					if(word!="") words.pb(word);
+					word="$";
+					iseq=true;
+				}
+			}
+			else
+			{
+				if(s.at(j)!=' ')
+					word+=(s.at(j));
+				//if(('a'<=s.at(j)&&s.at(j)<='z')||('A'<=s.at(j)&&s.at(j)<='Z')||('0'<=s.at(j)&&s.at(j)<='9')||(iseq&&s.at(j)!=' '))
+				//  word+=('A'<=s.at(j)&&s.at(j)<='Z')?(s.at(j)-'A'+'a'):(s.at(j));
+				else
+				{
+					if(!iseq)
+					{
+						if(word!="")words.pb(word);
+						word="";
+					}
+				}
+			}
+		}
+		if(word!="") words.pb(word);
+	}
+	void calcweight()
+	{
+		weights.clear();
+		for(auto& w: words)weights.pb(getweight(w));
+		for(auto& w: weights) weight=weight+w;
+	}
+	void preprocess(int stage)
+	{
+		for(int i=0;i<words.size();i++)
+		{
+			string e="";
+			string* nx=&e;
+			if(i+1<words.size())
+				nx=&words[i+1];
+			preprocessword(stage,words[i],*nx,i);
+		}
+	}
+	string gettext(int minw)
+	{
+		bool iss=true;
+		string ans="";
+		for(int i=0;i<words.size();i++)
+			if(weights[i].word>=minw)
+			{
+				if(iss)
+				{
+					iss=false;
+					ans+=words[i];
+				}
+				else ans+=" "+words[i];
+			}
+		return ans;
+	}
 };
 struct sentence
 {
-  vector<clause> clauses;
-  string s;
-  weightstruct weight;
-  void parse()
-  {
-    string cl="";
-    bool iseq=false;
-    for(int j=0;j<s.length();j++)
-    {
-      if(s.at(j)=='$') iseq=!iseq;
-      if(s.at(j)!=','|| iseq) cl+=s.at(j);
-      else
-      {
-        clause tmp;
-        tmp.s=cl;clauses.pb(tmp);cl="";
-      }
-    }
-    clause tmp;
-    tmp.s=cl;clauses.pb(tmp);
-    for(auto& c:clauses) c.parse();
-    int numclause=0;
-    for(int i=0;i<clauses.size();i++)
-      if(clauses[i].words.size()!=0)
-      {
-        auto tmp=clauses[i];
-        clauses[numclause]=tmp;
-        numclause++;
-      }
-    clauses.resize(numclause);
-  }
-  void calcweight()
-  {
-    weight=weightstruct();
-    for(auto& c : clauses)
-    {
-      c.calcweight();
-      weight=weight+c.weight;
-    }
-  }
-  string gettext(int minw)
-  {
-    bool iss=true;
-    string ans="";
-    for(auto& c:clauses)
-    if(c.weight.clause>=minw)
-    {
-      string tmp=c.gettext(minw);
-      if(tmp.length()>0)
-      {
-        if(iss)
-        {
-          iss=false;
-          ans=ans+tmp;
-        }
-        else ans+=","+tmp;
-      }
-    
-    }
-    return ans;
-  }
-};
-vector<sentence> text;
-vector<int> value;
-string line;
-int b,c;
-void init()
-{
-  cin>>c;
-  ifstream stin("soc1.txt");
-  string sentencefile="";
-  bool iseq=false;
-  while(getline(stin,line))
-  {
-    for(int i=0;i<line.length();i++)
-    {
-      b++;
-      if(line.at(i)=='$') iseq=!iseq;
-      if((line.at(i)!='.'&&line.at(i)!='?'&&line.at(i)!='!')|| iseq)sentencefile+=line.at(i);
-      else
-      {
-        sentence tmp;tmp.s=sentencefile;text.pb(tmp);
-        sentencefile="";
-      }
-    }
-    b++;
-    sentencefile+=' ';
-  }
-  for(auto& i:text)i.parse();
-}
+	vector<clause> clauses;
+	string s;
+	weightstruct weight;
+	void parse()
+	{
+		string cl="";
+		bool iseq=false;
+		for(int j=0;j<s.length();j++)
+		{
+			if(s.at(j)=='$') iseq=!iseq;
+			if(s.at(j)!=','|| iseq) cl+=s.at(j);
+			else
+			{
+				clause tmp;
+				tmp.s=cl;clauses.pb(tmp);cl="";
+			}
+		}
+		clause tmp;
+		tmp.s=cl;clauses.pb(tmp);
+		for(auto& c:clauses) c.parse();
+		int numclause=0;
+		for(int i=0;i<clauses.size();i++)
+			if(clauses[i].words.size()!=0)
+			{
+				auto tmp=clauses[i];
+				clauses[numclause]=tmp;
+				numclause++;
+			}
+		clauses.resize(numclause);
+	}
+	void calcweight()
+	{
+		weight=weightstruct();
+		for(auto& c : clauses)
+		{
+			c.calcweight();
+			weight=weight+c.weight;
+		}
+	}
+	void preprocess(int stage)
+	{
+		for(auto& c:clauses)
+			c.preprocess(stage);
+	}
+	string gettext(int minw)
+	{
+		bool iss=true;
+		string ans="";
+		for(auto& c:clauses)
+			if(c.weight.clause>=minw)
+			{
+				string tmp=c.gettext(minw);
+				if(tmp.length()>0)
+				{
+					if(iss)
+					{
+						iss=false;
+						ans=ans+tmp;
+					}
+					else ans+=","+tmp;
+				}
 
-string gettextstring(int minw)
+			}
+		return ans;
+	}
+};
+struct file
 {
-  bool iss=true;
-  string ans="";
-  for(auto& c:text)
-    if(c.weight.sentence>=minw)
-    {
-      string tmp=c.gettext(minw);
-      if(tmp.length()>0)
-      {
-        if(iss)
-        {
-          iss=false;
-          ans=ans+tmp;
-        }
-        else ans+="."+tmp;
-      }
-    
-    }
-  return ans;
+	vector<sentence> text;
+	void init(string tx)
+	{
+		string line;
+		stringstream stin(tx);
+		string sentencefile="";
+		bool iseq=false;
+		while(getline(stin,line))
+		{
+			if(line=="INPUT FORMAT")
+			{
+				sentence tmp;tmp.s=sentencefile;text.pb(tmp);
+				sentencefile=line;
+				while(getline(stin,line)&&line!="SAMPLE INPUT")
+				{
+					sentencefile+=' '+line;
+				}
+				sentence tmp2;tmp2.s=sentencefile;text.pb(tmp2);
+				sentencefile="";
+			}
+			if(line=="SAMPLE INPUT")
+			{
+				sentence tmp;tmp.s=sentencefile;text.pb(tmp);
+				sentencefile=line;
+				while(getline(stin,line))
+				{
+					sentencefile+=' '+line;
+				}
+				sentence tmp2;tmp2.s=sentencefile;text.pb(tmp2);
+				sentencefile="";
+			}
+			for(int i=0;i<line.length();i++)
+			{
+				if(line.at(i)=='$') iseq=!iseq;
+				if((line.at(i)!='.'&&line.at(i)!='?'&&line.at(i)!='!')|| iseq) sentencefile+=line.at(i);
+				else
+				{
+					sentence tmp;tmp.s=sentencefile;text.pb(tmp);
+					sentencefile="";
+				}
+			}
+			sentencefile+=' ';
+		}
+		sentence tmp;tmp.s=sentencefile;text.pb(tmp);
+		for(auto& i:text)i.parse();
+	}
+	void preprocess(int stage)
+	{
+		for(auto&x : text)
+			x.preprocess(stage);
+	}
+	string gettextstring(int minw)
+	{
+		for(auto& x:text)
+			x.calcweight();
+		bool iss=true;
+		string ans="";
+		for(auto& c:text)
+			if(c.weight.sentence>=minw)
+			{
+				string tmp=c.gettext(minw);
+				if(tmp.length()>0)
+				{
+					if(iss)
+					{
+						iss=false;
+						ans=ans+tmp;
+					}
+					else ans+="."+tmp;
+				}
+
+			}
+		return ans;
+	}
+};
+
+
+string huffmancompress(string s)
+{
+	return s;
 }
+int initsize=0;
+int compressrate;
+int targetsize;
 
 int main() {
-  init();
-  for(auto& x:text)
-    x.calcweight();
-  cout<<gettextstring(-10000);
-  
+	string input="";
 
-  
-  // WARNING: Huffman will CRASH if you pass a string with only one unique /*aracter
-  /*string orig = "test1234";
+	string line;
+	cin>>compressrate;
+	ifstream stin("soc1.txt");
+
+
+	while(getline(stin,line))
+	{
+		input+=line;
+		input+='\n';
+	}
+	initsize=input.length()-1;//remove last newline
+
+	file orig;
+	orig.init(input);
+
+	file final;
+	final=orig;
+	for(int i=0;i<5;i++)
+	{
+		final.preprocess(i);
+	}
+	targetsize=((100-compressrate)*initsize+99)/100;
+
+	int a=-10000;int b=10000;//(a,b]
+	while(a+1<b)
+	{
+		int c=(a+b)/2;
+		file tmp;
+		tmp.init(final.gettextstring(c));
+		tmp.preprocess(-1);
+		int sz=huffmancompress(tmp.gettextstring(-100000)).length();
+		if(sz>targetsize)
+		{
+			a=c;
+		}
+		else
+		{
+			b=c;
+		}
+	}
+	file output;
+	output.init(final.gettextstring(b));
+	output.preprocess(-1);
+	cout<<output.gettextstring(b);
+
+
+
+	/*
+
+	cout<<gettextstring(-10000);
+
+	 */
+
+	// WARNING: Huffman will CRASH if you pass a string with only one unique /*aracter
+	/*string orig = "test1234";
   vector<bool> enc = huffman::encode(orig);
   string dec = huffman::decode(enc);
   if (orig != dec) {

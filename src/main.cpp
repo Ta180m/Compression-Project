@@ -321,7 +321,7 @@ int main() {
 	string line;
 	cin>>compressrate;
 	ifstream stin(input_file);
-
+  compressrate = 100 - compressrate;
 
 	while(getline(stin,line))
 	{
@@ -330,6 +330,10 @@ int main() {
 	}
 	initsize=input.length()-1;//remove last newline
 
+  for(char& x:input)
+    if(x=='\r')
+      x=' ';
+      
 	file orig;
 	orig.init(input);
 
@@ -339,7 +343,7 @@ int main() {
 	{
 		final.preprocess(i);
 	}
-	targetsize=((100-compressrate)*initsize+99)/100;
+	targetsize=((compressrate)*initsize+99)/100;
 
 	final.calcweight();
 	int a=-10000;int b=10000;//(a,b]
@@ -351,7 +355,8 @@ int main() {
 		tmp.init(final.gettextstring(c));
 		tmp.calcweight();
 		tmp.preprocess(-1);
-		int sz=huffmancompress(tmp.gettextstring(-100000)).length();
+    string s = tmp.gettextstring(-100000);
+		int sz= (s == "" ? 0 : huffmancompress(s).length());
 		if(sz>targetsize)
 		{
 			a=c;
@@ -366,8 +371,12 @@ int main() {
 	output.calcweight();
 	output.preprocess(-1);
 	string s = output.gettextstring(-100000);
-	for (auto& c : s) if (c == '\r') c = ' ';
-	s = huffmancompress(s);
+  //cout << s << '\n';
+    
+  //where can i find a library of words in categories can't find any
+  // not really sure
+
+  s = huffmancompress(s);
   int orig_size = 0;
   ifstream testin(input_file);
   char c;
@@ -377,7 +386,6 @@ int main() {
   cout << "Compressed length: " << s.size() << '\n';
   cout << "Percent compression: " << 100.0 - ((double)100.0 * s.size() / orig_size) << "%\n";
 	printf("%s\n", s.c_str()); 
-
 
 	// WARNING: Huffman will CRASH if you pass a string with only one unique character
 	/*string orig = "test1234";

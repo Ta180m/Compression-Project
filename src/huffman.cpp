@@ -22,14 +22,14 @@ namespace huffman {
     }
     else {
       v.push_back(0);
-      n->l ? v.push_back(1), encode_tree(n->l, v) : v.push_back(0);
-      n->r ? v.push_back(1), encode_tree(n->r, v) : v.push_back(0);
+      n->l ? (v.push_back(1), encode_tree(n->l, v)) : v.push_back(0);
+      n->r ? (v.push_back(1), encode_tree(n->r, v)) : v.push_back(0);
     }
   }
 
   int idx = 0;
   void decode_tree(node * n, vector<bool> & v) {
-    if (idx >= v.size()) return;
+    if (idx > v.size()) return;
     if (v[idx++] == 1) {
       for (int i = 0; i < 7; ++i) if (v[idx++]) n->c |= (1 << i);
     }
@@ -53,7 +53,7 @@ namespace huffman {
   }
 
   void solve(node * n, vector<bool> & v, string & s) {
-	if (idx >= v.size()) return;
+	if (idx > v.size() || !n) return;
     if (n->c) s += n->c, solve(root, v, s);
     else v[idx++] == 0 ? solve(n->l, v, s) : solve(n->r, v, s);
   }
@@ -73,7 +73,7 @@ namespace huffman {
     root = new node(0, 0);
     decode_tree(root, v);
     string ret;
-    solve(root, v, ret);
+    while (idx < v.size()) solve(root, v, ret);
     return ret;
   }
 }

@@ -355,8 +355,10 @@ struct file
 string huffmancompress(string s)
 {
   vector<bool> enc = huffman::encode(s);
+  for (auto b : enc) cout << b;
+  cout << endl;
   string ans;
-  for (int i = 0; i < ((int)enc.size() + 7) / 8; ++i) {
+  for (int i = 0; i < (int)enc.size(); ++i) {
     char out = 0;
     for (int j = i; j < min(i + 8, (int)enc.size()); ++j) {
       if (enc[j]) out += (1 << (j - i));
@@ -370,7 +372,7 @@ int initsize=0;
 int compressrate;
 int targetsize;
 
-int main(int argc, char *argv[]) {
+/*int main(int argc, char *argv[]) {
   getlists();
 	string input="";
 
@@ -448,7 +450,9 @@ int main(int argc, char *argv[]) {
   cout << "Original length: " << orig_size << '\n';
   cout << "Compressed length: " << s.size() << '\n';
   cout << "Percent compression: " << 100.0 - ((double)100.0 * s.size() / orig_size) << "%\n";
-	printf("%s\n", s.c_str()); 
+  cout << s << '\n'; 
+  ofstream cout("test");
+	cout << s << '\n'; 
 
 	// WARNING: Huffman will CRASH if you pass a string with only one unique character
 	/*string orig = "test1234";
@@ -465,4 +469,4 @@ int main(int argc, char *argv[]) {
     cout << "Compressed length: " << (enc.size() + 7) / 8 << '\n';
 	cout << "Percent compression: " << 100.0 - (double)100.0 * (enc.size() + 7) / 8 / orig.size() << "%\n";
   }*/
-}
+//}

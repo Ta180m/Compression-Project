@@ -353,6 +353,7 @@ int main() {
 	output.calcweight();
 	output.preprocess(-1);
 	string s = output.gettextstring(-100000);
+	for (auto& c : s) if (c == '\r') c = ' ';
 	printf("%s\n", s.c_str());
 
 

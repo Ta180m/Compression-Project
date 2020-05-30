@@ -29,6 +29,7 @@ namespace huffman {
 
   int idx = 0;
   void decode_tree(node * n, vector<bool> & v) {
+    if (idx >= v.size()) return;
     if (v[idx++] == 1) {
       for (int i = 0; i < 7; ++i) if (v[idx++]) n->c |= (1 << i);
     }
@@ -52,7 +53,7 @@ namespace huffman {
   }
 
   void solve(node * n, vector<bool> & v, string & s) {
-	if (idx > v.size()) return;
+	if (idx >= v.size()) return;
     if (n->c) s += n->c, solve(root, v, s);
     else v[idx++] == 0 ? solve(n->l, v, s) : solve(n->r, v, s);
   }

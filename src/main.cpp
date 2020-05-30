@@ -3,7 +3,6 @@
 #define pb push_back
 
 
-
 struct weightstruct
 {
 	int word;
@@ -363,12 +362,12 @@ int main() {
 
 	 */
 
-	// WARNING: Huffman will CRASH if you pass a string with only one unique /*aracter
+	// WARNING: Huffman will CRASH if you pass a string with only one unique character
 	/*string orig = "test1234";
   vector<bool> enc = huffman::encode(orig);
   string dec = huffman::decode(enc);
   if (orig != dec) {
-	cout << "Not a match!\n";
+	  cout << "Not a match!\n";
   }
   else {
     cout << dec << '\n';
@@ -379,4 +378,3 @@ int main() {
 	cout << "Percent compression: " << 100.0 - (double)100.0 * (enc.size() + 7) / 8 / orig.size() << "%\n";
   }*/
 }
-

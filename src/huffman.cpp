@@ -22,10 +22,8 @@ namespace huffman {
     }
     else {
       v.push_back(0);
-      if (n->l) v.push_back(1), encode_tree(n->l, v);
-      else v.push_back(0);
-      if (n->r) v.push_back(1), encode_tree(n->r, v);
-      else v.push_back(0);
+      n->l ? v.push_back(1), encode_tree(n->l, v) : v.push_back(0);
+      n->r ? v.push_back(1), encode_tree(n->r, v) : v.push_back(0);
     }
   }
 
@@ -43,13 +41,11 @@ namespace huffman {
   void generate(vector<int> f) {
     priority_queue<node *, vector<node *>, comp> pq;
     for (int c = 1; c < 128; ++c) if (f[c]) {
-      node * n = new node(c, f[c]);
-      pq.push(n);
+      node * n = new node(c, f[c]); pq.push(n);
     }
     while (pq.size() > 1) {
       node * l = pq.top(); pq.pop(); node * r = pq.top(); pq.pop();
-      node * n = new node(0, l->f + r->f);
-      n->l = l, n->r = r;
+      node * n = new node(0, l->f + r->f); n->l = l, n->r = r;
       pq.push(n);
     }
     root = pq.top();
@@ -68,9 +64,7 @@ namespace huffman {
     traverse(root);
     vector<bool> ret;
     encode_tree(root, ret);
-    for (auto& c : s) {
-      for (auto b : code[c]) ret.push_back(b);
-    }
+    for (auto& c : s) for (auto b : code[c]) ret.push_back(b);
     return ret;
   }
 

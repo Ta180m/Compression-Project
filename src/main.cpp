@@ -368,16 +368,15 @@ int main() {
 	string s = output.gettextstring(-100000);
 	for (auto& c : s) if (c == '\r') c = ' ';
 	s = huffmancompress(s);
-	printf("%s\n", s.c_str());
-
-  
-  
-  /*int final_ratio = 10, orig_size = 0;
+  int orig_size = 0;
   ifstream testin(input_file);
   char c;
   while (testin >> c) ++orig_size;
-  while (10 * ans.size() > final_ratio * orig_size) ans.pop_back();
-  cout << ans;*/
+  while (100 * s.size() > compressrate * orig_size) s.pop_back();
+  cout << "Original length: " << orig_size << '\n';
+  cout << "Compressed length: " << s.size() << '\n';
+  cout << "Percent compression: " << 100.0 - ((double)100.0 * s.size() / orig_size) << "%\n";
+	printf("%s\n", s.c_str()); 
 
 
 	// WARNING: Huffman will CRASH if you pass a string with only one unique character

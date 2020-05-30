@@ -14,13 +14,50 @@ struct weightstruct
 		return weightstruct(word+w.word,clause+w.clause,sentence+w.sentence);
 	}
 };
+map<string,int> wordlist;
+set<string> adjlist;
+void getlists()
+{
+  ifstream listfile("fullist");
+  for(int i=0;i<500;i++)
+  {
+    string a;int b;
+    listfile>>a>>b;
+    wordlist[a]=b;
+  }
+  ifstream listfileadj("adjlist");
+  for(int i=0;i<227;i++)
+  {
+    string a;
+    listfileadj>>a;
+    adjlist.insert(a);
+  }
+}
 
 weightstruct getweight(string s)
 {
 	if(s[0]=='$')
-		return weightstruct(200,100,100);
-	if(s=="one"||s=="two"||s=="three"||s=="four"||s=="five"||s=="six"||s=="seven"||s=="eight"||s=="nine")return weightstruct(100,50,50);
-	if(s=="example")return weightstruct(-300,-200,-200);
+		return weightstruct(200,50,10);
+	if(s=="one"||s=="two"||s=="three"||s=="four"||s=="five"||s=="six"||s=="seven"||s=="eight"||s=="nine")return weightstruct(100,25,10);
+	if(s=="example")return weightstruct(-300,-200,-100);
+  
+
+  
+  if(s=="spi")
+    return weightstruct(-100,-10,-200);
+  if(s=="ipf")
+    return weightstruct(-100,30,50);
+  if(s=="please") return weightstruct(-300,0,0);
+  if(adjlist.find(s)!=adjlist.end())
+  {
+    return weightstruct(-100,-10,-10);
+  }
+  if(wordlist.find(s)!=wordlist.end())
+  {
+    return weightstruct(-wordlist[s]/100000,-10,-5);
+  }
+  
+  /*
 	if(s=="a"||s=="is"||s=="are"||s=="to"||s=="so"||s=="as") return weightstruct(-200,0,0);
 	if(s=="the")
 		return weightstruct(-200,0,0);
@@ -38,6 +75,14 @@ void preprocessword(int stage,string& s,string& next,int pos)
 	{
 		if(s[0]=='$')
 			s=s.substr(1,s.length()-2);
+    if(s.length()>5)
+    {
+      string tmp;
+      for(char x:s)
+        if(x!='a'&&x!='e'&&x!='i'&&x!='o'&&x!='u')
+          tmp+=x;
+      s=tmp;
+    }
 	}
 	if(stage==0)
 	{
@@ -48,6 +93,19 @@ void preprocessword(int stage,string& s,string& next,int pos)
 	}
 	if(stage==1)
 	{
+    if(s=="sample"&&next=="input")
+      s="spi",next="";
+    if(s=="sample"&&next=="output")
+      s="spo",next="";
+    if(s=="input"&&next=="format")
+      s="ipf",next="";
+    if(s=="output"&&next=="format")
+      s="opf",next="";
+
+    if(s=="input")
+      s="ipt";
+    if(s=="output")
+      s="opt";
 		if(s=="and")
 			s=",";
 		if(s.size()>=2)
@@ -94,7 +152,7 @@ struct clause
 			}
 			else
 			{
-				if(s.at(j)!=' ')
+				if(s.at(j)!=' '&&s.at(j)!='\"'&&s.at(j)!='\"')
 					word+=(s.at(j));
 				//if(('a'<=s.at(j)&&s.at(j)<='z')||('A'<=s.at(j)&&s.at(j)<='Z')||('0'<=s.at(j)&&s.at(j)<='9')||(iseq&&s.at(j)!=' '))
 				//  word+=('A'<=s.at(j)&&s.at(j)<='Z')?(s.at(j)-'A'+'a'):(s.at(j));
@@ -156,7 +214,7 @@ struct sentence
 		for(int j=0;j<s.length();j++)
 		{
 			if(s.at(j)=='$') iseq=!iseq;
-			if(s.at(j)!=','|| iseq) cl+=s.at(j);
+			if((s.at(j)!=','&&s.at(j)!='('&&s.at(j)!=')'&&s.at(j)!=';'&&s.at(j)!=':')|| iseq) cl+=s.at(j);
 			else
 			{
 				clause tmp;
@@ -313,6 +371,7 @@ int compressrate;
 int targetsize;
 
 int main(int argc, char *argv[]) {
+  getlists();
 	string input="";
 
   string input_file = argv[1];
@@ -371,7 +430,7 @@ int main(int argc, char *argv[]) {
 	output.calcweight();
 	output.preprocess(-1);
 	string s = output.gettextstring(-100000);
-  //cout << s << '\n';
+  cout << s << '\n';
     
   //where can i find a library of words in categories can't find any
   // not really sure

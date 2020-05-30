@@ -352,7 +352,7 @@ int main() {
 	output.init(final.gettextstring(b));
 	output.calcweight();
 	output.preprocess(-1);
-	cout<<output.gettextstring(-100000);
+	cout<<output.gettextstring(-100000)<<endl;
 
 
 

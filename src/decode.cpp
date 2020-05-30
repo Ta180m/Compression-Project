@@ -2,7 +2,7 @@
 #include "huffman.h"
 
 /*int main() {
-  ifstream enc("êõz=Çãñx¼Þïw»]®W«Õj5F£Ñèôz=žO'“Éär¹\\®×k5šÍf³Y¬V«Õj5†Ãa°X¬ÖkµZ­V«UªUªUªÕjµÚív»Ýî÷ûý~?");
+  ifstream enc("A.out");
   stringstream ss;
   ss << enc.rdbuf();
   string s = ss.str();

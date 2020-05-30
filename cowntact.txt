@@ -1,62 +1,95 @@
-Farmer John is worried for the health of his cows (conveniently numbered
-$1 ... N$ as always) after an outbreak of the  highly contagious bovine
-disease COWVID-19.  
+Farmer John is planning to build N (1≤N≤105) farms that will be connected by N−1 roads, forming a tree. Typically, whenever one of his farms is having an issue he is not told the specific farm that is having an issue. Instead, he is told that one of the farms along the path from some farm A to another farm B is having an issue. This is often confusing for Farmer John, as he usually drives offroad tractors and isn't familiar with the road system.
+Farmer John considers the location of a farm to be a 2D point. He would prefer to be told that there is a problem in one of the farms in a specified axis-aligned rectangular box. This way Farmer John can decide for himself how to navigate between the farms. Bessie told him that this is a little too ambitious, so he will be satisfied if he is notified with at most two axis-aligned rectangular boxes whose intersection (of farms) is empty and whose union is exactly the farms along the path from A to B. You must help Farmer John determine where he should build his farms such that this condition is satisfied.
 
-Recently, Farmer John tested all of his cows and found some of them to be 
-positive for the disease.  Using video footage from inside his barn, he is able
-to review recent interactions between pairs of cows --- it turns out that when
-cows greet each-other, they shake hooves, a gesture that can unfortunately
-spread the infection from one cow to another.  Farmer John assembles a
-time-stamped list of interacting pairs of cows, with entries of the form
-$(t, x, y)$, meaning that at time $t$, cow $x$ shook hooves with cow $y$. 
-Farmer John also knows the following:
+This is an interactive problem, you will not be using standard (or file) I/O. Solutions that use standard (or file) I/O will be disqualified. However, you ARE ALLOWED to use global and static variables. You must implement the following functions to help Farmer John:
 
-(i) Exactly one cow on his farm could have started out carrying the disease
-(we'll call this cow "patient zero").
+void addRoad(int A, int B): processes a road between farms A and B (0≤A,B≤N−1).
+void buildFarms(): determines where Farmer John should build all his farms.
+void notifyFJ(int A, int B): notifies Farmer John with either one or two boxes that satisfy the aforementioned conditions.
+Your implementation of the above functions will be able to call the functions given below. You may assume that notifyFJ will be called Q times (1≤Q≤105).
 
-(ii) Once a cow is infected, she passes the infection along with her next $K$
-hoof shakes (possibly including the same partner cow several times).  After 
-shaking hooves $K$ times, she no longer passes the infection along with 
-subsequent hoof shakes (since at this point she realizes she is spreading the
-infection and washes her hooves carefully).
+int getN(): gets the value of N.
+int getQ(): gets the value of Q.
+void setFarmLocation(int ID, int X, int Y): determines that Farmer John should build farm ID (0≤ID≤N−1) at location (X,Y) where (1≤X,Y≤N). Should only be called from buildFarms.
+void addBox(int X1, int Y1, int X2, int Y2): adds a box to notify Farmer John where (1≤X1≤X2≤N) and (1≤Y1≤Y2≤N). Should only be called from notifyFJ.
+The interactive protocol works as follows. First, addRoad will be called N−1 times, to inform your program of the road system. Then, buildFarms will be called and you must determine where Farmer John should build each farm and call setFarmLocation for every farm accordingly. Finally, there will be Q calls to notifyFJ where you must make either one or two calls to addBox to notify Farmer John.
 
-(iii) Once a cow is infected, she stays infected.
+It is guaranteed there is always a valid way to notify Farmer John using either one or two boxes. The memory limit for this problem is set to 512MB, above the usual 256MB limit.
 
-Unfortunately, Farmer John doesn't know which of his $N$ cows is patient zero,
-nor does he know the value of $K$!  Please help him narrow down the
-possibilities for these unknowns based on his data. It is guaranteed that at
-least one possibility is valid.
+For a C++ solution, use this template:
 
-INPUT FORMAT
-The first line of the input file contains $N$ ($2 <= N <= 100$) and $T$
-($1 <= T <= 250$).  The next line contains a string of length $N$ whose
-entries are 0s and 1s,  describing the current state of Farmer John's $N$ cows
---- 0 represents a healthy cow and 1 represents a cow presently with the
-disease.  Each of the next $T$ lines describes a record in Farmer John's list of
-interactions and consists of three integers $t$, $x$, and $y$, where $t$ is a
-positive integer time of the interaction ($t <= 250$) and $x$ and $y$ are
-distinct integers in the range $1 \ldots N$, indicating which cows shook hands
-at time $t$. At most one interaction happens at each point in time. 
+#include "grader.h"
 
-OUTPUT FORMAT
-Print a single line with three integers $x$, $y$, and $z$, where $x$ is the
-number of possible cows who could have been patient zero, $y$ is the smallest
-possible value of $K$ consistent with the data, and $z$ is the largest possible
-value of $K$ consistent with the data (if there is no upper bound on $K$ that
-can be deduced from the data, print "Infinity" for $z$). Note that it might be
-possible to have $K=0$.
+void addRoad(int a, int b){
+	// Fill in code here
+}
 
-SAMPLE INPUT
-4 3
-1100
-7 1 2
-5 2 3
-6 2 4
+void buildFarms(){
+	// Fill in code here
+}
 
-SAMPLE OUTPUT
-1 1 Infinity
+void notifyFJ(int a, int b){
+	// Fill in code here
+}
+For a Java solution, use this template:
 
-The only candidate for patient zero is cow 1. For all $K>0$, cow 1 infects cow 2
-at time 7, while cows 3 and 4 remain uninfected.
+import java.io.IOException;
+// If you find it necessary, you may import other standard libraries here.
+public class boxes extends Grader {
 
+  	// Copy this exactly:
+        
+@Override
+  	public static void main(String args[]) throws IOException { new boxes().run(); }
 
+        
+@Override
+  	public void addRoad(int a, int b) {
+      // Fill in code here
+  	}
+        
+@Override
+  	public void buildFarms(){
+      // Fill in code here
+	  }
+  	
+@Override
+  	public void notifyFJ(int a, int b){
+      // Fill in code here
+  	}
+}
+Sample Interaction
+
+Grader calls addRoad(0,1)
+
+Grader calls addRoad(1,2)
+
+Grader calls buildFarms()
+
+Solution calls setFarmLocation(0,1,1)
+
+Solution calls setFarmLocation(1,1,2)
+
+Solution calls setFarmLocation(2,2,2)
+
+Solution ends buildFarms()
+
+Grader calls notifyFJ(0,0)
+
+Solution calls addBox(1,1,1,1)
+
+Solution ends notifyFJ(0,0)
+
+Grader calls notifyFJ(0,2)
+
+Solution calls addBox(1,1,1,2)
+
+Solution calls addBox(2,2,2,2)
+
+Solution ends notifyFJ(0,2)
+
+Grader terminates, and solution passes test-case
+
+(Note: if you do not pass the first test case, the grader will indicate this as usual. However, note that the short sample interaction above does not correspond to the first test case or any other).
+
+Problem credits: Spencer Compton

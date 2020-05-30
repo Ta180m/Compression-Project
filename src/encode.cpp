@@ -71,6 +71,7 @@ weightstruct getweight(string s)
 }
 void preprocessword(int stage,string& s,string& next,int pos)
 {
+  if(s.length()<2)return; 
 	if(stage==-1)//after deleting low weights
 	{
 		if(s[0]=='$')

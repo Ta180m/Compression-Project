@@ -312,14 +312,14 @@ int initsize=0;
 int compressrate;
 int targetsize;
 
-int main() {
+int main(int argc, char *argv[]) {
 	string input="";
 
-  string input_file = "soc1.txt";
+  string input_file = argv[1];
   //cin >> input_file;
 
 	string line;
-	cin>>compressrate;
+	compressrate = atoi(argv[2]);
 	ifstream stin(input_file);
   compressrate = 100 - compressrate;
 
@@ -375,7 +375,11 @@ int main() {
     
   //where can i find a library of words in categories can't find any
   // not really sure
+  // im not getting anywhere with weighting lol
+  // there is no list i can find
 
+
+  //!!! are we counting input size correctly bc the \r issue?
   s = huffmancompress(s);
   int orig_size = 0;
   ifstream testin(input_file);

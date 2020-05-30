@@ -1,21 +1,23 @@
-Farmer John is planning to build N (1≤N≤105) farms that will be connected by N−1 roads, forming a tree. Typically, whenever one of his farms is having an issue he is not told the specific farm that is having an issue. Instead, he is told that one of the farms along the path from some farm A to another farm B is having an issue. This is often confusing for Farmer John, as he usually drives offroad tractors and isn't familiar with the road system.
+Farmer John is planning to build N (1<=N<=105) farms that will be connected by N-1 roads, forming a tree. Typically, whenever one of his farms is having an issue he is not told the specific farm that is having an issue. Instead, he is told that one of the farms along the path from some farm A to another farm B is having an issue. This is often confusing for Farmer John, as he usually drives offroad tractors and isn't familiar with the road system.
 Farmer John considers the location of a farm to be a 2D point. He would prefer to be told that there is a problem in one of the farms in a specified axis-aligned rectangular box. This way Farmer John can decide for himself how to navigate between the farms. Bessie told him that this is a little too ambitious, so he will be satisfied if he is notified with at most two axis-aligned rectangular boxes whose intersection (of farms) is empty and whose union is exactly the farms along the path from A to B. You must help Farmer John determine where he should build his farms such that this condition is satisfied.
 
 This is an interactive problem, you will not be using standard (or file) I/O. Solutions that use standard (or file) I/O will be disqualified. However, you ARE ALLOWED to use global and static variables. You must implement the following functions to help Farmer John:
 
-void addRoad(int A, int B): processes a road between farms A and B (0≤A,B≤N−1).
+void addRoad(int A, int B): processes a road between farms A and B (0<=A,B<=N-1).
 void buildFarms(): determines where Farmer John should build all his farms.
 void notifyFJ(int A, int B): notifies Farmer John with either one or two boxes that satisfy the aforementioned conditions.
-Your implementation of the above functions will be able to call the functions given below. You may assume that notifyFJ will be called Q times (1≤Q≤105).
+Your implementation of the above functions will be able to call the functions given below. You may assume that notifyFJ will be called Q times (1<=Q<=105).
 
 int getN(): gets the value of N.
 int getQ(): gets the value of Q.
-void setFarmLocation(int ID, int X, int Y): determines that Farmer John should build farm ID (0≤ID≤N−1) at location (X,Y) where (1≤X,Y≤N). Should only be called from buildFarms.
-void addBox(int X1, int Y1, int X2, int Y2): adds a box to notify Farmer John where (1≤X1≤X2≤N) and (1≤Y1≤Y2≤N). Should only be called from notifyFJ.
-The interactive protocol works as follows. First, addRoad will be called N−1 times, to inform your program of the road system. Then, buildFarms will be called and you must determine where Farmer John should build each farm and call setFarmLocation for every farm accordingly. Finally, there will be Q calls to notifyFJ where you must make either one or two calls to addBox to notify Farmer John.
+void setFarmLocation(int ID, int X, int Y): determines that Farmer John should build farm ID (0<=ID<=N-1) at location (X,Y) where (1<=X,Y<=N). Should only be called from buildFarms.
+void addBox(int X1, int Y1, int X2, int Y2): adds a box to notify Farmer John where (1<=X1<=X2<=N) and (1<=Y1<=Y2<=N). Should only be called from notifyFJ.
+The interactive protocol works as follows. First, addRoad will be called N-1 times, to inform your program of the road system. Then, buildFarms will be called and you must determine where Farmer John should build each farm and call setFarmLocation for every farm accordingly. Finally, there will be Q calls to notifyFJ where you must make either one or two calls to addBox to notify Farmer John.
 
 It is guaranteed there is always a valid way to notify Farmer John using either one or two boxes. The memory limit for this problem is set to 512MB, above the usual 256MB limit.
-
+$$$$$$$$$$
+..............
+,,,,.,.,.,.,.,:":ef[]wlf[wepk[]]
 For a C++ solution, use this template:
 
 #include "grader.h"

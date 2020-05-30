@@ -352,6 +352,14 @@ struct file
 	}
 };
 
+bool invalidChar (char c) 
+{  
+    return !(c>=0 && c <128);   
+} 
+void stripUnicode(string & str) 
+{ 
+    str.erase(remove_if(str.begin(),str.end(), invalidChar), str.end());  
+}
 
 string huffmancompress(string s)
 {
@@ -396,6 +404,7 @@ int main(int argc, char *argv[]) {
 		input+=line;
 		input+='\n';
 	}
+  stripUnicode(input);
 	initsize=input.length()-1;//remove last newline
 
   for(char& x:input)

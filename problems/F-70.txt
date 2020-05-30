@@ -1,0 +1,5 @@
+fj plcd n boxes vrtcs rtd tree,nmbrd 1 n,1<=n<=10000.ntlly,each box cntnd xctly one mrbl.nfrtntly,mschvs elsie moved mrbls rnd,boxes empty cntn one mrbl,total nmbr mrbls still n.bss dcdd help fj mvng mrbls such each box cntns xctly one mrbl again.ccmplshd sqnc moves,each move cnssts mvng one mrbl box djcnt vrtx.mnmm nmbr moves rqrd bss chv goal.ipf each case strts nmbr n fllwd n lines.each line cntns least three nmbrs,1<=v<=n,nmbr vrtx.vrtcs nmbrd 1 n,given ncrsng order ipt.0<=m<=n,nmbr mrbls rgnlly plcd vrtx v.0<=d<=n-1, nmbr chldrn v.same line,fllw d dstnct vrtx nmbrs gvng dntts chldrn v.opf each case,opt smllst nmbr moves mrbls rsltng one mrbl each vrtx tree
+Original length: 1103
+Compressed length: 330
+Percent compression: 70.0816%
+ªfîp÷æõøvÕé:þ½n]_ÝðÏÓ»<»ê÷äç-o{ãw5¨jØùŽm^¼û,>É)îwCg¹VJ¹Ò8-3ð|+î´'{;‡Cÿê~†î†nôúq©ÞÆu½ÿsé«'Á–3OÁÆ¡Y×õ\}7t–3–ô8zý…·q]ùžoëz.Upß÷7s‘b4—v·—Çu=—b	ÎÁÝÐ^?×‘úqám\×‡d$|OÄ’'ŒK‘§qh–ÀÁqh6úLÍq{yám\×wC·(N¯k¥]ÏÏ¼ç[ãÐ,W"w3G°MÈ{A:ÏÁJ[jiîùÖ~gwÑ¸ŸoÙ"8ÞF¯ŸsC©SXf{¾•à„cÇ<ßZ+íúVJ¹ç[q§=…f¿§Ê—*ZM´?àãØƒç[ãºž+ùÝ“œâZi·Ö

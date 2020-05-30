@@ -368,11 +368,17 @@ string huffmancompress(string s)
   return ans;
 }
 
+int huffmancompresslength(string s)
+{
+  vector<bool> enc = huffman::encode(s);
+  return (enc.size() + 7) / 8;
+}
+
 int initsize=0;
 int compressrate;
 int targetsize;
 
-/*int main(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
   getlists();
 	string input="";
 
@@ -392,7 +398,7 @@ int targetsize;
 	initsize=input.length()-1;//remove last newline
 
   for(char& x:input)
-    if(x=='\r')
+    if(x=='\r' || x == '\n')
       x=' ';
       
 	file orig;
@@ -417,7 +423,7 @@ int targetsize;
 		tmp.calcweight();
 		tmp.preprocess(-1);
     string s = tmp.gettextstring(-100000);
-		int sz= (s == "" ? 0 : huffmancompress(s).length());
+		int sz= (s == "" ? 0 : huffmancompresslength(s));
 		if(sz>targetsize)
 		{
 			a=c;
@@ -469,4 +475,4 @@ int targetsize;
     cout << "Compressed length: " << (enc.size() + 7) / 8 << '\n';
 	cout << "Percent compression: " << 100.0 - (double)100.0 * (enc.size() + 7) / 8 / orig.size() << "%\n";
   }*/
-//}
+}

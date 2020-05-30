@@ -1,7 +1,7 @@
 #include "common.h"
 #include "huffman.h"
 
-int main() {
+/*int main() {
   ifstream enc("test");
   stringstream ss;
   ss << enc.rdbuf();
@@ -12,4 +12,4 @@ int main() {
     //for (int i = 0; i < 8; ++i) v.push_back(1 & (c >> i));
   }
   cout << huffman::decode(v);
-}
+}*/

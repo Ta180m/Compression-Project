@@ -296,8 +296,17 @@ struct file
 
 string huffmancompress(string s)
 {
-	return s;
+  vector<bool> enc = huffman::encode(s);
+  string ans;
+  for (int i = 0; i < ((int)enc.size() + 7) / 8; ++i) {
+    char out = 0;
+    for (int j = i; j < min(i + 8, (int)enc.size()); ++j) {
+      if (enc[j]) i += (1 << (j - i));
+    }
+    ans += out;
+  }
 }
+
 int initsize=0;
 int compressrate;
 int targetsize;
@@ -305,9 +314,12 @@ int targetsize;
 int main() {
 	string input="";
 
+  string input_file = "soc1.txt";
+  //cin >> input_file;
+
 	string line;
 	cin>>compressrate;
-	ifstream stin("soc1.txt");
+	ifstream stin(input_file);
 
 
 	while(getline(stin,line))
@@ -354,14 +366,17 @@ int main() {
 	output.preprocess(-1);
 	string s = output.gettextstring(-100000);
 	for (auto& c : s) if (c == '\r') c = ' ';
-	printf("%s\n", s.c_str());
+	//printf("%s\n", s.c_str());
 
+  
+  
+  /*int final_ratio = 10, orig_size = 0;
+  ifstream testin(input_file);
+  char c;
+  while (testin >> c) ++orig_size;
+  while (10 * ans.size() > final_ratio * orig_size) ans.pop_back();
+  cout << ans;*/
 
-	/*
-
-	cout<<gettextstring(-10000);
-
-	 */
 
 	// WARNING: Huffman will CRASH if you pass a string with only one unique character
 	/*string orig = "test1234";

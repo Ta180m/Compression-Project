@@ -355,6 +355,7 @@ struct file
 string huffmancompress(string s)
 {
   vector<bool> enc = huffman::encode(s);
+  ofstream cout("output");
   for (auto b : enc) cout << b;
   cout << endl;
   string ans;

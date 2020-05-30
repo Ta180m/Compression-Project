@@ -3,6 +3,7 @@
 #define pb push_back
 
 
+
 struct weightstruct
 {
 	int word;
@@ -18,10 +19,19 @@ struct weightstruct
 weightstruct getweight(string s)
 {
 	if(s[0]=='$')
-		return weightstruct(1000,0,0);
-	else if(s=="farmer"||s.length()==1||s=="example"||s=="is"||s=="are")return weightstruct(-100,0,0);
-	else if(s=="one"||s=="two"||s=="three"||s=="four"||s=="five"||s=="six"||s=="seven"||s=="eight"||s=="nine")return weightstruct(100,0,0);
-	else return weightstruct(-10,0,0);
+		return weightstruct(200,100,100);
+	if(s=="one"||s=="two"||s=="three"||s=="four"||s=="five"||s=="six"||s=="seven"||s=="eight"||s=="nine")return weightstruct(100,50,50);
+	if(s=="example")return weightstruct(-300,-200,-200);
+	if(s=="a"||s=="is"||s=="are"||s=="to"||s=="so"||s=="as") return weightstruct(-200,0,0);
+	if(s=="the")
+		return weightstruct(-200,0,0);
+/*
+	if(s.length()==1)
+		return weightstruct(-300,0,0);
+	if(s.length()==2)
+		return weightstruct(-50,0,0);
+*/
+	return weightstruct(-10,0,0);
 }
 void preprocessword(int stage,string& s,string& next,int pos)
 {
@@ -256,10 +266,13 @@ struct file
 		for(auto&x : text)
 			x.preprocess(stage);
 	}
-	string gettextstring(int minw)
+	void calcweight()
 	{
 		for(auto& x:text)
 			x.calcweight();
+	}
+	string gettextstring(int minw)
+	{
 		bool iss=true;
 		string ans="";
 		for(auto& c:text)
@@ -316,12 +329,15 @@ int main() {
 	}
 	targetsize=((100-compressrate)*initsize+99)/100;
 
+	final.calcweight();
 	int a=-10000;int b=10000;//(a,b]
 	while(a+1<b)
 	{
 		int c=(a+b)/2;
 		file tmp;
+
 		tmp.init(final.gettextstring(c));
+		tmp.calcweight();
 		tmp.preprocess(-1);
 		int sz=huffmancompress(tmp.gettextstring(-100000)).length();
 		if(sz>targetsize)
@@ -335,8 +351,9 @@ int main() {
 	}
 	file output;
 	output.init(final.gettextstring(b));
+	output.calcweight();
 	output.preprocess(-1);
-	cout<<output.gettextstring(b);
+	cout<<output.gettextstring(-100000);
 
 
 
@@ -362,3 +379,4 @@ int main() {
 	cout << "Percent compression: " << 100.0 - (double)100.0 * (enc.size() + 7) / 8 / orig.size() << "%\n";
   }*/
 }
+

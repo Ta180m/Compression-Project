@@ -356,17 +356,16 @@ string huffmancompress(string s)
 {
   vector<bool> enc = huffman::encode(s);
   ofstream cout("output");
-  for (auto b : enc) cout << b;
-  cout << endl;
   string ans;
-  for (int i = 0; i < (int)enc.size(); ++i) {
+  for (int i = 0; i < (int)enc.size(); i += 8) {
     char out = 0;
     for (int j = i; j < min(i + 8, (int)enc.size()); ++j) {
       if (enc[j]) out += (1 << (j - i));
     }
     ans += out;
   }
-  return ans;
+  cout << ans;
+  return ans;  
 }
 
 int huffmancompresslength(string s)
@@ -458,8 +457,6 @@ int main(int argc, char *argv[]) {
   cout << "Compressed length: " << s.size() << '\n';
   cout << "Percent compression: " << 100.0 - ((double)100.0 * s.size() / orig_size) << "%\n";
   cout << s << '\n'; 
-  ofstream cout("test");
-	cout << s << '\n'; 
 
 	// WARNING: Huffman will CRASH if you pass a string with only one unique character
 	/*string orig = "test1234";

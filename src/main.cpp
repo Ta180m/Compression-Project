@@ -301,10 +301,11 @@ string huffmancompress(string s)
   for (int i = 0; i < ((int)enc.size() + 7) / 8; ++i) {
     char out = 0;
     for (int j = i; j < min(i + 8, (int)enc.size()); ++j) {
-      if (enc[j]) i += (1 << (j - i));
+      if (enc[j]) out += (1 << (j - i));
     }
     ans += out;
   }
+  return ans;
 }
 
 int initsize=0;
@@ -366,7 +367,8 @@ int main() {
 	output.preprocess(-1);
 	string s = output.gettextstring(-100000);
 	for (auto& c : s) if (c == '\r') c = ' ';
-	//printf("%s\n", s.c_str());
+	s = huffmancompress(s);
+	printf("%s\n", s.c_str());
 
   
   

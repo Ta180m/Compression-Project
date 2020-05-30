@@ -363,6 +363,7 @@ void stripUnicode(string & str)
 
 string huffmancompress(string s)
 {
+  if (s.size() < 2) return "";
   vector<bool> enc = huffman::encode(s);
   ofstream cout("output");
   string ans;
@@ -379,6 +380,7 @@ string huffmancompress(string s)
 
 int huffmancompresslength(string s)
 {
+	if (s.size() < 2) return 0;
   vector<bool> enc = huffman::encode(s);
   return (enc.size() + 7) / 8;
 }

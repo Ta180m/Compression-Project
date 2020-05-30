@@ -1,2 +1,2 @@
 language = "cpp"
-run = "g++ src/*.cpp -o compress -std=c++1y; echo Compilation done; ./compress soc1.txt 50"
+run = "g++ src/*.cpp -o compress -std=c++1y; echo Compilation done; ./compress soc1.txt 89"
